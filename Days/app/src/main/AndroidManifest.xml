@@ -13,6 +13,7 @@
         </activity>
         <activity
             android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/title_activity_splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

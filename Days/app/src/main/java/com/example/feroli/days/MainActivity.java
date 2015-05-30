@@ -1,77 +1,62 @@
 package com.example.feroli.days;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.data.DataSet;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.Highlight;
+import com.github.mikephil.charting.utils.PercentFormatter;
 
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity implements OnChartValueSelectedListener{
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    Spinner studySpin;
-    ArrayList<String> goals;
-    ProgressBar studyPro;
-
-    ListView mListGoals;
-    ArrayList<Goal> mGoalsList;
     String addGoalInput;
-    GoalsAdapter mAdapter;
+    protected String[] mParties = new String[] {
+            "Uno", "Dos", "Tres"
+    };
+
+    private PieChart mChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mListGoals = (ListView) findViewById(R.id.goalslist);
+        View goalInfo = findViewById(R.id.goalinfo);
 
-        Goal[] goals = new Goal[] { new Goal("hola", 3), new Goal("hola", 13), new Goal("hola", 21),
-                new Goal("hola", 3), new Goal("hola", 13), new Goal("hola", 21),
-                new Goal("hola", 3), new Goal("hola", 13), new Goal("hola", 21),
-                new Goal("hola", 3), new Goal("hola", 13), new Goal("hola", 21),
-                new Goal("hola", 3), new Goal("hola", 13), new Goal("hola", 21),
-                new Goal("hola", 3), new Goal("hola", 13), new Goal("hola", 21)};
 
-        mGoalsList = new ArrayList<>();
-        for (int i = 0; i < goals.length; ++i) {
-            mGoalsList.add(goals[i]);
-        }
-
-        mAdapter = new GoalsAdapter(this, mGoalsList);
-        mListGoals.setAdapter(mAdapter);
-
-        mListGoals.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        goalInfo.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            public boolean onLongClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Title" + position);
+                builder.setTitle("¿Deseas borrar tu objetivo actual?");
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mGoalsList.remove(position);
-                        mAdapter.notifyDataSetChanged();
+                        //Se elimina
+
 
                     }
                 });
@@ -87,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.attachToListView(mListGoals);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         addGoalInput = input.getText().toString();
-                        mGoalsList.add(new Goal(addGoalInput, 0));
-                        mAdapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -118,76 +101,161 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-    }
+        mChart = (PieChart) findViewById(R.id.chart1);
+        mChart.setUsePercentValues(true);
+        mChart.setDragDecelerationFrictionCoef(0.95f);
+        mChart.setDrawHoleEnabled(true);
+        mChart.setHoleColorTransparent(true);
+        mChart.setTransparentCircleColor(Color.WHITE);
+        mChart.setHoleRadius(58f);
+        mChart.setTransparentCircleRadius(61f);
+        mChart.setDrawCenterText(true);
+        mChart.setRotationAngle(0);
+        mChart.setOnChartValueSelectedListener(this);
+        mChart.setCenterText("Estudiar");
+        mChart.animateY(1500, Easing.EasingOption.EaseInOutQuad);
 
+        setData(1, 21);
+
+
+        Legend l = mChart.getLegend();
+        l.setPosition(LegendPosition.RIGHT_OF_CHART);
+        l.setXEntrySpace(7f);
+        l.setYEntrySpace(5f);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.pie, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch (item.getItemId()) {
+            case R.id.actionToggleValues: {
+                for (DataSet<?> set : mChart.getData().getDataSets())
+                    set.setDrawValues(!set.isDrawValuesEnabled());
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    public class GoalsAdapter extends ArrayAdapter<Goal> {
-        public GoalsAdapter(Context context, ArrayList<Goal> goals) {
-            super(context, 0, goals);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // Get the data item for this position
-            Goal goal = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.goalrow, parent, false);
+                mChart.invalidate();
+                break;
             }
-            // Lookup view for data population
-            TextView titleGoal = (TextView) convertView.findViewById(R.id.goaltitle);
-            titleGoal.setText(goal.title);
+            case R.id.actionToggleHole: {
+                if (mChart.isDrawHoleEnabled())
+                    mChart.setDrawHoleEnabled(false);
+                else
+                    mChart.setDrawHoleEnabled(true);
+                mChart.invalidate();
+                break;
+            }
+            case R.id.actionDrawCenter: {
+                if (mChart.isDrawCenterTextEnabled())
+                    mChart.setDrawCenterText(false);
+                else
+                    mChart.setDrawCenterText(true);
+                mChart.invalidate();
+                break;
+            }
+            case R.id.actionToggleXVals: {
 
-            TextView noGoal = (TextView) convertView.findViewById(R.id.goalno);
-            noGoal.setText(goal.day + "/21");
-
-            SeekBar daysGoal = (SeekBar) convertView.findViewById(R.id.goaldays);
-            daysGoal.setMax(21);
-            daysGoal.setProgress(goal.day);
-            daysGoal.setEnabled(false);
-            daysGoal.refreshDrawableState();
-
-
-            return convertView;
+                mChart.setDrawSliceText(!mChart.isDrawSliceTextEnabled());
+                mChart.invalidate();
+                break;
+            }
+            case R.id.actionSave: {
+                //mChart.saveToGallery("title"+System.currentTimeMillis());
+                mChart.saveToPath("title" + System.currentTimeMillis(), "");
+                break;
+            }
+            case R.id.actionTogglePercent:
+                mChart.setUsePercentValues(!mChart.isUsePercentValuesEnabled());
+                mChart.invalidate();
+                break;
+            case R.id.animateX: {
+                mChart.animateX(1800);
+                break;
+            }
+            case R.id.animateY: {
+                mChart.animateY(1800);
+                break;
+            }
+            case R.id.animateXY: {
+                mChart.animateXY(1800, 1800);
+                break;
+            }
         }
+        return true;
     }
 
+    private void setData(int count, float range) {
 
-    public class Goal {
-        String title;
-        int day;
+        float mult = range;
 
-        public Goal(String title, int day){
-            this.title = title;
-            this.day = day;
+        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
+
+        // IMPORTANT: In a PieChart, no values (Entry) should have the same
+        // xIndex (even if from different DataSets), since no values can be
+        // drawn above each other.
+        for (int i = 0; i < count + 1; i++) {
+            yVals1.add(new Entry((float) (Math.random() * mult) + mult / 5, i));
         }
 
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        for (int i = 0; i < count + 1; i++)
+            xVals.add(mParties[i % mParties.length]);
+
+        PieDataSet dataSet = new PieDataSet(yVals1, "Calendario");
+        //dataSet.setSliceSpace(3f);
+        //dataSet.setSelectionShift(5f);
+
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+
+        colors.add(ColorTemplate.getHoloBlue());
+
+        dataSet.setColors(colors);
+
+        PieData data = new PieData(xVals, dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(11f);
+        data.setValueTextColor(Color.WHITE);
+        mChart.setData(data);
+
+        mChart.highlightValues(null);
+        mChart.invalidate();
     }
 
     @Override
-    public void onClick(View v) {
+    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
 
+        if (e == null)
+            return;
+        Log.i("VAL SELECTED",
+                "Value: " + e.getVal() + ", xIndex: " + e.getXIndex()
+                        + ", DataSet index: " + dataSetIndex);
     }
+
+    @Override
+    public void onNothingSelected() {
+        Log.i("PieChart", "nothing selected");
+    }
+
+
 }

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -24,6 +25,8 @@ import com.lylc.widget.circularprogressbar.CircularProgressBar;
 public class MainActivity extends AppCompatActivity{
 
     String addGoalInput;
+    String mGoal = "empty";
+    TextView mTextQuote;
 
     private CircularProgressBar mCProgress;
 
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity{
         View goalInfo = findViewById(R.id.goalinfo);
 
         mCProgress = (CircularProgressBar) findViewById(R.id.circularprogressbar1);
-        mCProgress.setProgress(5);
+        mCProgress.setProgress(0);
         mCProgress.setTitle("Your goal");
         mCProgress.setSubTitle("");
 
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 mCProgress.setTitle("No smoking");
+                mGoal = "smoking";
                 mCProgress.setProgress(0);
                 mainbutton.collapse();
 
@@ -83,11 +87,14 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 mCProgress.setTitle("Early Bird");
+                mGoal = "early";
                 mCProgress.setProgress(0);
                 mainbutton.collapse();
 
             }
         });
+
+        mTextQuote = (TextView) findViewById(R.id.quote);
 
         FloatingActionButton ghost = (FloatingActionButton) findViewById(R.id.ghost);
         ghost.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +102,12 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 if(mCProgress.getProgress() + 5 != 100) {
                     mCProgress.setProgress(mCProgress.getProgress() + 5);
+                    if(mGoal.equals("smoking")){
+                        mTextQuote.setText(SmokingText(mCProgress.getProgress() + 5));
+                    }
                 }else{
+
+                    mTextQuote.setText("");
                     mCProgress.setProgress(0);
                     Toast.makeText(MainActivity.this, "Congratulations!", Toast.LENGTH_SHORT).show();
                     NotificationCompat.Builder mBuilder =
@@ -113,6 +125,73 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+    }
+
+    public String SmokingText(int p){
+        String text = "empty";
+        switch (p){
+            case 5:
+                text = "Risks of heart attack are reduced.";
+                break;
+            case 10:
+                text = "Nicotine has left your bloodstream.";
+                break;
+            case 15:
+                text = "Your sense of smell and taste are returning to normal.";
+                break;
+            case 20:
+                text = "Damaged nerve endings have started to regrow.";
+                break;
+            case 25:
+                text = "Risks of heart attack are reduced.";
+                break;
+            case 30:
+                text = "Nicotine has left your bloodstream.";
+                break;
+            case 35:
+                text = "Your sense of smell and taste are returning to normal.";
+                break;
+            case 40:
+                text = "Damaged nerve endings have started to regrow.";
+                break;
+            case 45:
+                text = "Risks of heart attack are reduced.";
+                break;
+            case 50:
+                text = "Nicotine has left your bloodstream.";
+                break;
+            case 55:
+                text = "Damaged nerve endings have started to regrow.";
+                break;
+            case 60:
+                text = "Risks of heart attack are reduced.";
+            case 65:
+                text = "Your sense of smell and taste are returning to normal.";
+                break;
+            case 70:
+                text = "Damaged nerve endings have started to regrow.";
+                break;
+            case 75:
+                text = "Risks of heart attack are reduced.";
+                break;
+            case 80:
+                text = "Nicotine has left your bloodstream.";
+                break;
+            case 85:
+                text = "Your sense of smell and taste are returning to normal.";
+                break;
+            case 90:
+                text = "Damaged nerve endings have started to regrow.";
+                break;
+            case 95:
+                text = "Risks of heart attack are reduced.";
+                break;
+            case 100:
+                text = "Nicotine has left your bloodstream.";
+                break;
+
+        }
+        return text;
     }
 
 

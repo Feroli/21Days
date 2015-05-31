@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mCProgress.setProgress(0);
         mCProgress.setTitle("Your goal");
         mCProgress.setSubTitle("");
+        mCProgress.setTitleColor(getResources().getColor(R.color.primary));
 
         goalInfo.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Days</string>
-    <string name="objetivos">Objectives</string>
+    <string name="objetivos">Your Goal</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_trophies">Trophies</string>
 </resources>

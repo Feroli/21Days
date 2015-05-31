@@ -9,15 +9,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
+
 import java.util.Random;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        setDragEdge(SwipeBackLayout.DragEdge.BOTTOM);
         TextView tv = (TextView) findViewById(R.id.phrase);
 
         String[] phrases = new String[] {"Develop one habit at a time.", "Keep your new habit small.", "Commit to your new habit for three weeks.", "Concentrate on starting.","Recognize the positive in what you’re doing.","Don’t miss two days in a row." };

@@ -2,6 +2,7 @@ package com.example.feroli.days;
 
 import android.app.NotificationManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent i = new Intent(this, SplashActivity.class);
+        startActivity(i);
+
         View goalInfo = findViewById(R.id.goalinfo);
 
         mCProgress = (CircularProgressBar) findViewById(R.id.circularprogressbar1);
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mCProgress.setTitle("Your goal");
+                        mCProgress.setProgress(0);
+                        mTextQuote.setText("");
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCProgress.setTitle("No smoking");
                 mGoal = "smoking";
+                mTextQuote.setText("");
                 mCProgress.setProgress(0);
                 mainbutton.collapse();
 
@@ -90,6 +97,18 @@ public class MainActivity extends AppCompatActivity {
                 mGoal = "early";
                 mCProgress.setProgress(0);
                 mainbutton.collapse();
+                mTextQuote.setText("");
+
+
+            }
+        });
+
+        final FloatingActionButton trophies = (FloatingActionButton) findViewById(R.id.trophies);
+        trophies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, TrophiesActivity.class);
+                startActivity(i);
 
             }
         });
@@ -101,13 +120,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mGoal.equals("empty")) {
+
                     if (mCProgress.getProgress() + 5 != 100) {
+
                         mCProgress.setProgress(mCProgress.getProgress() + 5);
                         if (mGoal.equals("smoking")) {
                             mTextQuote.setText(SmokingText(mCProgress.getProgress() + 5));
                         } else if (mGoal.equals("early")) {
                             mTextQuote.setText(EarlyText(mCProgress.getProgress() + 5));
                         }
+
                     } else {
 
                         mTextQuote.setText("");

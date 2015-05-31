@@ -22,7 +22,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     String addGoalInput;
     String mGoal = "empty";
@@ -100,36 +100,108 @@ public class MainActivity extends AppCompatActivity{
         ghost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mCProgress.getProgress() + 5 != 100) {
-                    mCProgress.setProgress(mCProgress.getProgress() + 5);
-                    if(mGoal.equals("smoking")){
-                        mTextQuote.setText(SmokingText(mCProgress.getProgress() + 5));
-                    }
-                }else{
+                if (!mGoal.equals("empty")) {
+                    if (mCProgress.getProgress() + 5 != 100) {
+                        mCProgress.setProgress(mCProgress.getProgress() + 5);
+                        if (mGoal.equals("smoking")) {
+                            mTextQuote.setText(SmokingText(mCProgress.getProgress() + 5));
+                        } else if (mGoal.equals("early")) {
+                            mTextQuote.setText(EarlyText(mCProgress.getProgress() + 5));
+                        }
+                    } else {
 
-                    mTextQuote.setText("");
-                    mCProgress.setProgress(0);
-                    Toast.makeText(MainActivity.this, "Congratulations!", Toast.LENGTH_SHORT).show();
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(MainActivity.this)
-                                    .setSmallIcon(R.drawable.trophy)
-                                    .setContentTitle("Congrats!")
-                                    .setContentText("Your trophy has been stored in your collection!");
-                    int mNotificationId = 001;
-                    NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                        mTextQuote.setText("");
+                        mCProgress.setProgress(0);
+                        Toast.makeText(MainActivity.this, "Congratulations!", Toast.LENGTH_SHORT).show();
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(MainActivity.this)
+                                        .setSmallIcon(R.drawable.trophy)
+                                        .setContentTitle("Congrats!")
+                                        .setContentText("Your trophy has been stored in your collection!");
+                        int mNotificationId = 001;
+                        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "You have to choose a goal", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
 
-
-
     }
 
-    public String SmokingText(int p){
+    public String EarlyText(int p) {
         String text = "empty";
-        switch (p){
+        switch (p) {
+            case 5:
+                text = "You have enhanced your productivity.";
+                break;
+            case 10:
+                text = "Now you can sustaine a healthy diet.";
+                break;
+            case 15:
+                text = "You have improved your quality of sleep.";
+                break;
+            case 20:
+                text = "Now you're happier than night owls.";
+                break;
+            case 25:
+                text = "You have a better body shape.";
+                break;
+            case 30:
+                text = "You have enhanced your productivity.";
+                break;
+            case 35:
+                text = "Now you can sustaine a healthy diet.";
+                break;
+            case 40:
+                text = "You have improved your quality of sleep.";
+                break;
+            case 45:
+                text = "You have enhanced your productivity.";
+                break;
+            case 50:
+                text = "Now you can sustaine a healthy diet.";
+                break;
+            case 55:
+                text = "You have a better body shape.";
+                break;
+            case 60:
+                text = "You have enhanced your productivity.";
+            case 65:
+                text = "You have improved your quality of sleep.";
+                break;
+            case 70:
+                text = "Now you can sustaine a healthy diet.";
+                break;
+            case 75:
+                text = "You have improved your quality of sleep.";
+                break;
+            case 80:
+                text = "You have enhanced your productivity.";
+                break;
+            case 85:
+                text = "Now you can sustaine a healthy diet.";
+                break;
+            case 90:
+                text = "You have improved your quality of sleep.";
+                break;
+            case 95:
+                text = "You have enhanced your productivity.";
+                break;
+            case 100:
+                text = "Now you can sustaine a healthy diet.";
+                break;
+
+        }
+        return text;
+    }
+
+
+    public String SmokingText(int p) {
+        String text = "empty";
+        switch (p) {
             case 5:
                 text = "Risks of heart attack are reduced.";
                 break;

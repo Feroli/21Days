@@ -1,7 +1,12 @@
 package com.example.feroli.days;
 
+import android.app.NotificationManager;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -9,21 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.PieChart;
-
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.melnykov.fab.FloatingActionButton;
 
 
 public class MainActivity extends AppCompatActivity{
 
     String addGoalInput;
-    protected String[] mParties = new String[] {
-            "Uno", "Dos", "Tres"
-    };
-
-    private PieChart mChart;
 
     private CircularProgressBar mCProgress;
 
@@ -34,19 +34,22 @@ public class MainActivity extends AppCompatActivity{
 
         View goalInfo = findViewById(R.id.goalinfo);
 
+        mCProgress = (CircularProgressBar) findViewById(R.id.circularprogressbar1);
+        mCProgress.setProgress(5);
+        mCProgress.setTitle("Your goal");
+        mCProgress.setSubTitle("");
 
         goalInfo.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("¿Deseas borrar tu objetivo actual?");
+                builder.setTitle("Are you sure about this?");
+                builder.setMessage("Would you like to delete your goal?");
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Se elimina
-
-
+                        mCProgress.setTitle("Your goal");
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -62,53 +65,55 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionsMenu mainbutton = (FloatingActionsMenu) findViewById(R.id.mainbutton);
+
+        final FloatingActionButton smoking = (FloatingActionButton) findViewById(R.id.smoking);
+        smoking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Title");
+                mCProgress.setTitle("No smoking");
+                mCProgress.setProgress(0);
+                mainbutton.collapse();
 
-//                /final EditText input = new EditText(MainActivity.this);
-//                input.setInputType(InputType.TYPE_CLASS_TEXT);
-//                builder.setView(input);*/
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //addGoalInput = input.getText().toString();
-                        mCProgress.setProgress(mCProgress.getProgress()+5);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
             }
         });
 
-        mCProgress = (CircularProgressBar) findViewById(R.id.circularprogressbar1);
-        mCProgress.setProgress(5);
-        mCProgress.setTitle("Tarea");
-        mCProgress.setSubTitle("");
+        FloatingActionButton nosleep = (FloatingActionButton) findViewById(R.id.nosleep);
+        nosleep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCProgress.setTitle("Early Bird");
+                mCProgress.setProgress(0);
+                mainbutton.collapse();
+
+            }
+        });
+
+        FloatingActionButton ghost = (FloatingActionButton) findViewById(R.id.ghost);
+        ghost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCProgress.getProgress() + 5 != 100) {
+                    mCProgress.setProgress(mCProgress.getProgress() + 5);
+                }else{
+                    mCProgress.setProgress(0);
+                    Toast.makeText(MainActivity.this, "Congratulations!", Toast.LENGTH_SHORT).show();
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(MainActivity.this)
+                                    .setSmallIcon(R.drawable.trophy)
+                                    .setContentTitle("Congrats!")
+                                    .setContentText("Your trophy has been stored in your collection!");
+                    int mNotificationId = 001;
+                    NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                }
+            }
+        });
+
+
 
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.pie, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
-    }
 
 }

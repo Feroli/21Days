@@ -13,6 +13,11 @@
 <item name="cpb_subtitleColor">@color/circular_progress_default_subtitle</item>
 </style>
 
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 <style name="Widget.ProgressBar.Holo.CircularProgressBar" parent="Widget.ProgressBar.CircularProgressBar">
 <item name="cpb_hasShadow">false</item>
 <item name="cpb_strokeWidth">5</item>

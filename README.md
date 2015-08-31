@@ -1,2 +1,2 @@
 # 21Days
-An android application which helps you to complete your goals and stablish them wihtin 21 days.
+An android application which helps you to establish and complete your goals wihtin 21 days.
